@@ -1,0 +1,40 @@
+﻿[*.vb]
+
+# BC40005: 成员隐藏基类型中的可重写的方法
+dotnet_diagnostic.BC40005.severity = silent
+
+# BC40003: 成员隐藏在基类型中声明的可重载的成员
+dotnet_diagnostic.BC40003.severity = silent
+
+# BC40004: 成员与基类型中的成员发生冲突，因此应声明为 "Shadows"
+dotnet_diagnostic.BC40004.severity = silent
+
+# BC42104: 在为变量赋值之前，变量已被使用
+dotnet_diagnostic.BC42104.severity = silent
+
+# CA1819: 属性不应返回数组
+dotnet_diagnostic.CA1819.severity = silent
+
+# IDE0032: 使用自动属性
+dotnet_style_prefer_auto_properties = false:silent
+
+# CA2101: 指定对 P/Invoke 字符串参数进行封送处理
+dotnet_diagnostic.CA2101.severity = silent
+
+# IDE0059: 不需要赋值
+visual_basic_style_unused_value_assignment_preference = unused_local_variable:silent
+
+# CA2227: 集合属性应为只读
+dotnet_diagnostic.CA2227.severity = silent
+
+# CA1304: 指定 CultureInfo
+dotnet_diagnostic.CA1304.severity = silent
+
+# CA1711: 标识符应采用正确的后缀
+dotnet_diagnostic.CA1711.severity = silent
+
+# CA1508: 避免死条件代码
+dotnet_diagnostic.CA1508.severity = none
+
+# CA1003: 使用泛型事件处理程序实例
+dotnet_diagnostic.CA1003.severity = none
