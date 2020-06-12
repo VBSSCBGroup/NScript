@@ -1,4 +1,5 @@
 set NS=wscript.createobject("NScript.NetScript")
+NS.KeepDebuggerSafe()
 NS.CheckVer 1.6,True,5
 set NC=wscript.createobject("NScript.NSConsole")
 NC.InitConsole()

@@ -16,9 +16,9 @@ Public Class Form1
     End Sub
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles Me.Load
-        DataGridView1.Rows.Add("My App", "FormAutoGen" & (Rnd() * 10000), 0, 0, 400, 400, "Form")
+        DataGridView1.Rows.Add("My App", "FormAutoGen" & Int(Rnd() * 1000000), 0, 0, 400, 400, "Form")
     End Sub
-    Private Function GenCode()
+    Private Function GenXmlCode()
         Dim strbulid As New StringBuilder
         Dim frm As DataGridViewRow
         For Each wawa As DataGridViewRow In DataGridView1.Rows
@@ -30,6 +30,7 @@ Public Class Form1
             Return ""
         End If
         Dim rows = frm.Cells
+
         strbulid.AppendFormat("<FormData text=#{0}# x=#{1}# y=#{2}# id=#{3}# px=#{4}# py=#{5}#>", rows("_Text").Value, rows("X").Value, rows("Y").Value, rows("Id").Value, rows("SizeX").Value, rows("SizeY").Value)
         For Each wawa As DataGridViewRow In DataGridView1.Rows
             rows = wawa.Cells
@@ -39,12 +40,91 @@ Public Class Form1
             End If
         Next
         strbulid.Append("</FormData>")
+
+        Return strbulid.ToString()
+    End Function
+    Private Function GenVbsCode()
+        Dim strbulid As New StringBuilder
+        Dim frm As DataGridViewRow
+        For Each wawa As DataGridViewRow In DataGridView1.Rows
+            If wawa.Cells("_Type").Value = "Form" Then
+                frm = wawa
+            End If
+        Next
+        If frm Is Nothing Then
+            Return ""
+        End If
+        Dim rows = frm.Cells
+        Dim tsr As New StringBuilder()
+        Dim clkhnd As New Dictionary(Of String, String) 'Click
+        Dim msehnd As New Dictionary(Of String, String) 'MouseEvent
+        Dim keyhnd As New Dictionary(Of String, String) 'KeyboardEvent
+        For Each e In EventHandlers
+            Select Case e.Key.Item2.ToLower()
+                Case "click"
+                    clkhnd.Add(e.Key.Item1, e.Value)
+                Case "mouseevent"
+                    msehnd.Add(e.Key.Item1, e.Value)
+                Case "keyboardevent"
+                    keyhnd.Add(e.Key.Item1, e.Value)
+                Case Else
+
+            End Select
+        Next
+        If clkhnd.Count <> 0 Then
+            tsr.AppendFormat("Sub {0}_Click(sender,e)
+Select Case e.SenderId
+", rows("Id").Value)
+            For Each clkh In clkhnd
+                tsr.AppendLine("Case """ & clkh.Key & """" & vbCrLf &
+                               clkh.Value)
+            Next
+            tsr.AppendLine("End Select
+End Sub")
+        End If
+        If msehnd.Count <> 0 Then
+            tsr.AppendFormat("Sub {0}_MouseEvent(sender,e)
+Select Case e.SenderId
+", rows("Id").Value)
+            For Each clkh In msehnd
+                tsr.AppendLine("Case """ & clkh.Key & """" & vbCrLf &
+                               clkh.Value)
+            Next
+            tsr.AppendLine("End Select
+End Sub")
+        End If
+        If keyhnd.Count <> 0 Then
+            tsr.AppendFormat("Sub {0}_KeybroadEvent(sender,e)
+Select Case e.SenderId
+", rows("Id").Value)
+            For Each clkh In keyhnd
+                tsr.AppendLine("Case """ & clkh.Key & """" & vbCrLf &
+                               clkh.Value)
+            Next
+            tsr.AppendLine("End Select
+End Sub")
+        End If
+        strbulid.AppendFormat("Set {0} = Wscript.CreateObject(""NScript.NSTForm"",""{0}_"")
+{1}
+{0}.bulid """, rows("Id").Value, tsr.ToString())
+        Dim str222 As String = rows("Id").Value
+        strbulid.AppendFormat("<FormData text=#{0}# x=#{1}# y=#{2}# id=#{3}# px=#{4}# py=#{5}#>", rows("_Text").Value, rows("X").Value, rows("Y").Value, rows("Id").Value, rows("SizeX").Value, rows("SizeY").Value)
+        For Each wawa As DataGridViewRow In DataGridView1.Rows
+            rows = wawa.Cells
+            If rows("_Type").Value = "Form" Or wawa.IsNewRow Then
+            Else
+                strbulid.AppendFormat("<{6} text=#{0}# x=#{1}# y=#{2}# id=#{3}# sizex=#{4}# sizey=#{5}#/>", rows("_Text").Value, rows("X").Value, rows("Y").Value, rows("Id").Value, rows("SizeX").Value, rows("SizeY").Value, rows("_Type").Value)
+            End If
+        Next
+        strbulid.Append("</FormData>""")
+        strbulid.AppendFormat("
+{0}.ShowDialog()", str222)
         Return strbulid.ToString()
     End Function
     Public nform As New NSTForm
     Private Sub UpdataForm()
         nform.NaiveForm.Controls.Clear()
-        nform.Bulid(GenCode())
+        nform.Bulid(GenXmlCode())
         For Each wawa As Control In nform.NaiveForm.Controls
             AddHandler wawa.MouseDown, Sub(sender1 As Object, e1 As EventArgs)
                                            movecontrol = sender1
@@ -52,10 +132,32 @@ Public Class Form1
                                            movecontrol.Cursor = Cursors.NoMove2D
                                        End Sub
             AddHandler wawa.MouseUp, Sub(sender1 As Object, e1 As EventArgs)
-                                         movecontrol.Cursor = Cursors.Default
-                                         movecontrol = Nothing
-                                         oldpoint = New Point()
+                                         If movecontrol IsNot Nothing Then
+                                             movecontrol.Cursor = Cursors.Default
+                                             movecontrol = Nothing
+                                             oldpoint = New Point()
+                                         End If
                                      End Sub
+            AddHandler wawa.Click, Sub(sender2 As Object, e2 As System.Windows.Forms.MouseEventArgs)
+                                       If TypeOf sender2 Is Button Then
+                                           Dim sjbd As New EventHandlerEdit(Me, CType(sender2, Control).Name)
+                                           If movecontrol IsNot Nothing Then
+                                               movecontrol.Cursor = Cursors.Default
+                                               movecontrol = Nothing
+                                               oldpoint = New Point()
+                                           End If
+                                           sjbd.Show()
+                                       End If
+                                   End Sub
+            AddHandler wawa.MouseDoubleClick, Sub(sender2 As Object, e2 As System.Windows.Forms.MouseEventArgs)
+                                                  Dim sjbd As New EventHandlerEdit(Me, CType(sender2, Control).Name)
+                                                  If movecontrol IsNot Nothing Then
+                                                      movecontrol.Cursor = Cursors.Default
+                                                      movecontrol = Nothing
+                                                      oldpoint = New Point()
+                                                  End If
+                                                  sjbd.Show()
+                                              End Sub
         Next
         nform.NaiveForm.MdiParent = Me
         nform.NaiveForm.StartPosition = FormStartPosition.Manual
@@ -63,14 +165,25 @@ Public Class Form1
         nform.NaiveForm.TopMost = True
         nform.NaiveForm.Show()
     End Sub
+    Friend EventHandlers As New Dictionary(Of Tuple(Of String, String), String)
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         UpdataForm()
     End Sub
     Private movecontrol As Control, oldpoint As Point
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
-        TextBox1.Text = GenCode()
+        TextBox1.Text = GenVbsCode()
     End Sub
     Private n As Int32
+
+    Public Sub New()
+
+        ' 此调用是设计器所必需的。
+        InitializeComponent()
+
+        ' 在 InitializeComponent() 调用之后添加任何初始化。
+
+    End Sub
+
     Private Sub DataGridView1_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellEndEdit
         UpdataForm()
     End Sub
@@ -87,5 +200,9 @@ Public Class Form1
             Next
             movecontrol.Location = Control.MousePosition - oldpoint
         End If
+    End Sub
+
+    Private Sub Form1_Click(sender As Object, e As EventArgs) Handles TextBox1.DoubleClick
+        Id.HeaderText = "(你的)名字"
     End Sub
 End Class

@@ -123,9 +123,9 @@
       <Project>{2c7562d7-8541-4987-aece-446d39067610}</Project>
       <Name>NScript.Helper</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NScript\NScript.vbproj">
-      <Project>{337024e4-d456-41cb-bbb4-a7a677f32337}</Project>
-      <Name>NScript</Name>
+    <ProjectReference Include="..\NScript2\NScript2.vbproj">
+      <Project>{35326efa-fc7f-48c6-94f9-4e819f0488b2}</Project>
+      <Name>NScript2</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />

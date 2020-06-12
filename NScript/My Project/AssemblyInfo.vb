@@ -10,7 +10,7 @@ Imports System.Runtime.InteropServices
 '查看程序集特性的值
 
 <Assembly: AssemblyTitle("NScript")>
-<Assembly: AssemblyDescription("我太难了")>
+<Assembly: AssemblyDescription("NetScript内测")>
 <Assembly: AssemblyCompany("")>
 <Assembly: AssemblyProduct("NScript")>
 <Assembly: AssemblyCopyright("")>

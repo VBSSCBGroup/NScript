@@ -26,13 +26,6 @@ Partial Class Form1
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
-        Me._Text = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Id = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.X = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Y = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.SizeX = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.SizeY = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me._Type = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
@@ -42,6 +35,13 @@ Partial Class Form1
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
+        Me._Text = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Id = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.X = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Y = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.SizeX = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.SizeY = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me._Type = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
@@ -74,42 +74,7 @@ Partial Class Form1
         Me.DataGridView1.RowTemplate.Height = 23
         Me.DataGridView1.Size = New System.Drawing.Size(878, 173)
         Me.DataGridView1.TabIndex = 0
-        '
-        '_Text
-        '
-        Me._Text.HeaderText = "Text(文本)"
-        Me._Text.Name = "_Text"
-        '
-        'Id
-        '
-        Me.Id.HeaderText = "Id（名字）"
-        Me.Id.Name = "Id"
-        '
-        'X
-        '
-        Me.X.HeaderText = "X轴"
-        Me.X.Name = "X"
-        '
-        'Y
-        '
-        Me.Y.HeaderText = "Y轴"
-        Me.Y.Name = "Y"
-        '
-        'SizeX
-        '
-        Me.SizeX.HeaderText = "X轴大小"
-        Me.SizeX.Name = "SizeX"
-        '
-        'SizeY
-        '
-        Me.SizeY.HeaderText = "Y轴大小"
-        Me.SizeY.Name = "SizeY"
-        '
-        '_Type
-        '
-        Me._Type.HeaderText = "类型"
-        Me._Type.Name = "_Type"
-        Me._Type.ReadOnly = True
+        Me.DataGridView1.AllowUserToAddRows = False
         '
         'Button1
         '
@@ -194,6 +159,42 @@ Partial Class Form1
         Me.Timer1.Enabled = True
         Me.Timer1.Interval = 40
         '
+        '_Text
+        '
+        Me._Text.HeaderText = "文本"
+        Me._Text.Name = "_Text"
+        '
+        'Id
+        '
+        Me.Id.HeaderText = "名字"
+        Me.Id.Name = "Id"
+        '
+        'X
+        '
+        Me.X.HeaderText = "X轴"
+        Me.X.Name = "X"
+        '
+        'Y
+        '
+        Me.Y.HeaderText = "Y轴"
+        Me.Y.Name = "Y"
+        '
+        'SizeX
+        '
+        Me.SizeX.HeaderText = "X轴大小"
+        Me.SizeX.Name = "SizeX"
+        '
+        'SizeY
+        '
+        Me.SizeY.HeaderText = "Y轴大小"
+        Me.SizeY.Name = "SizeY"
+        '
+        '_Type
+        '
+        Me._Type.HeaderText = "类型"
+        Me._Type.Name = "_Type"
+        Me._Type.ReadOnly = True
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
@@ -227,6 +228,7 @@ Partial Class Form1
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents Label2 As Label
     Friend WithEvents Label3 As Label
+    Friend WithEvents Timer1 As Timer
     Friend WithEvents _Text As DataGridViewTextBoxColumn
     Friend WithEvents Id As DataGridViewTextBoxColumn
     Friend WithEvents X As DataGridViewTextBoxColumn
@@ -234,5 +236,4 @@ Partial Class Form1
     Friend WithEvents SizeX As DataGridViewTextBoxColumn
     Friend WithEvents SizeY As DataGridViewTextBoxColumn
     Friend WithEvents _Type As DataGridViewTextBoxColumn
-    Friend WithEvents Timer1 As Timer
 End Class

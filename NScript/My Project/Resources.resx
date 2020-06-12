@@ -156,9 +156,11 @@
   <data name="Error0x7" xml:space="preserve">
     <value>NScriptGame没有初始化</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Gma_QrCodeNet_Encoding" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Gma.QrCodeNet.Encoding.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="NiVerH" xml:space="preserve">
+    <value>1.9</value>
+  </data>
+  <data name="NiVerL" xml:space="preserve">
+    <value>11298</value>
   </data>
   <data name="Ver" xml:space="preserve">
     <value>2.32|瘟疫复兴+|1.91</value>

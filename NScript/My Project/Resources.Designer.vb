@@ -178,12 +178,20 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  查找 System.Byte[] 类型的本地化资源。
+        '''  查找类似 1.9 的本地化字符串。
         '''</summary>
-        Friend ReadOnly Property Gma_QrCodeNet_Encoding() As Byte()
+        Friend ReadOnly Property NiVerH() As String
             Get
-                Dim obj As Object = ResourceManager.GetObject("Gma_QrCodeNet_Encoding", resourceCulture)
-                Return CType(obj,Byte())
+                Return ResourceManager.GetString("NiVerH", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 11298 的本地化字符串。
+        '''</summary>
+        Friend ReadOnly Property NiVerL() As String
+            Get
+                Return ResourceManager.GetString("NiVerL", resourceCulture)
             End Get
         End Property
         

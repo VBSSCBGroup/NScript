@@ -15,6 +15,7 @@ Imports NScript.Drawing
 Imports Gma
 Imports System.Net
 Imports System.Runtime.Serialization
+Imports System.Security
 
 Namespace NScript.Net
     <ComVisible(True), ComClass> Public NotInheritable Class Socket
@@ -54,6 +55,97 @@ Namespace NScript.Net
 
     End Class
 End Namespace
+Namespace NScript.Gameing
+    <ComClass(), ComVisible(True)> Public Class ConsoleHooker
+#Region "常量声明"
+#Disable Warning
+        Private Const WH_MOUSE_LL = 14
+        Private Const WH_KEYBOARD_LL = 13
+        Private Const WH_MOUSE = 7
+        Private Const WH_KEYBOARD = 2
+        Private Const WM_MOUSEMOVE = &H200
+        Private Const WM_LBUTTONDOWN = &H201
+        Private Const WM_RBUTTONDOWN = &H204
+        Private Const WM_MBUTTONDOWN = &H207
+        Private Const WM_LBUTTONUP = &H202
+        Private Const WM_RBUTTONUP = &H205
+        Private Const WM_MBUTTONUP = &H208
+        Private Const WM_LBUTTONDBLCLK = &H203
+        Private Const WM_RBUTTONDBLCLK = &H206
+        Private Const WM_MBUTTONDBLCLK = &H209
+        Private Const WM_MOUSEWHEEL = &H20A
+        Private Const WM_KEYDOWN = &H100
+        Private Const WM_KEYUP = &H101
+        Private Const WM_SYSKEYDOWN = &H104
+        Private Const WM_SYSKEYUP = &H105
+
+        Private Const VK_SHIFT As Byte = &H10
+        Private Const VK_CAPITAL As Byte = &H14
+        Private Const VK_NUMLOCK As Byte = &H90
+#Enable Warning
+#End Region
+
+        Protected Overrides Sub Finalize()
+            Me.UnHook()
+            Me.Finalize()
+        End Sub
+        Public Sub New()
+
+        End Sub
+        Private hMouseHook As Integer
+
+        Private MouseHookProcedure As HookProc
+        Public Sub UnHook(Optional ByVal UninstallMouseHook As Boolean = True)
+            '卸载鼠标钩子
+            If hMouseHook <> 0 AndAlso UninstallMouseHook Then
+                Dim retMouse As Integer = UnhookWindowsHookEx(hMouseHook)
+                hMouseHook = 0
+                If retMouse = 0 Then
+                    Throw New Win32Exception(Marshal.GetLastWin32Error)
+                End If
+            End If
+        End Sub
+        Public Sub StartHook(Optional ByVal InstallMouseHook As Boolean = True)
+            '注册鼠标钩子
+            If InstallMouseHook AndAlso hMouseHook = 0 Then
+                MouseHookProcedure = New HookProc(AddressOf MouseHookProc)
+                hMouseHook = SetWindowsHookEx(WH_MOUSE, MouseHookProcedure, LoadLibrary("nscript.dll"), 0)
+                If hMouseHook = 0 Then
+                    UnHook(False)
+                    Throw New Win32Exception(Marshal.GetLastWin32Error)
+                End If
+            End If
+        End Sub
+        Public Event ConsoleClick(sender As Object, e As MouseEventArgs)
+        Private Function MouseHookProc(ByVal nCode As Integer, ByVal wParam As Integer, ByRef lParam As MouseHookStruct) As Integer
+            If nCode < 0 Then
+                Return 0
+            Else
+                If nCode = 3 Then
+                    Dim pid As Long = 0
+                    GetWindowThreadProcessId(lParam.Hwnd, pid)
+                    If pid = 0 Then
+                        Return 0
+                    Else
+                        Dim sentid As Long
+                        GetWindowThreadProcessId(GetConsoleWindow(), sentid)
+                        If sentid = 0 Then
+                            Return 0
+                        Else
+                            If pid = sentid Then
+                                RaiseEvent ConsoleClick(Me, New MouseEventArgs(Nothing, MouseEventType.MousePress))
+                                Return -1
+                            Else
+                                Return 0
+                            End If
+                        End If
+                    End If
+                End If
+            End If
+            Return 0
+        End Function
+    End Class
+End Namespace
 Namespace NScript.QrCode
     <ComVisible(True), ComClass> Public Class QrCodeEncoding
         Private IQrCode As Gma.QrCodeNet.Encoding.QrEncoder
@@ -61,11 +153,18 @@ Namespace NScript.QrCode
         Public Sub New()
             If Not IsAppendEvent Then
                 AddHandler AppDomain.CurrentDomain.AssemblyResolve, Function(sender As Object, e As ResolveEventArgs) As Assembly
-                                                                        If e.Name = "Gma.QrCodeNet.Encoding" Then
-                                                                            Return Assembly.Load(My.Resources.Gma_QrCodeNet_Encoding)
-                                                                        Else
-                                                                            Return Nothing
+                                                                        If e.Name = "Gma.QrCodeNet.Encoding" And (e.RequestingAssembly Is Nothing) Then
+                                                                            If Debugger.Launch() Then
+                                                                                If Debugger.IsAttached Then
+                                                                                    Debugger.Break()
+                                                                                Else
+                                                                                    Throw New FileLoadException()
+                                                                                End If
+                                                                            Else
+                                                                                Environment.Exit(New FileLoadException().HResult)
+                                                                            End If
                                                                         End If
+                                                                        Return Nothing
                                                                     End Function
                 IsAppendEvent = True
             End If
@@ -471,6 +570,12 @@ Namespace NScript
     <ComVisible(True)> <ComClass()> Public Class NetScript
         Private Shared IsInManMode As Boolean = False
         Private Shared IsNewed As Boolean = False
+        <SecurityCritical()> Public Sub Update()
+            AppDomain.CurrentDomain.SetPrincipalPolicy(System.Security.Principal.PrincipalPolicy.WindowsPrincipal)
+            Dim p As New System.Security.Permissions.PrincipalPermission("", "Administrators")
+            p.Demand()
+            NScript.Update.UpdateVer()
+        End Sub
         Public Sub New()
             If IsNewed Then
                 Environment.Exit(&H404)
@@ -1439,7 +1544,7 @@ End Namespace", IIf(HasReturn, "Function", "Sub"), DllMethodName, nstr, DllName)
 
 
     <ComClass()> <ComVisible(True)> Public Class Base64
-        Public Function ToBase64(data As Byte()) As String
+        Public Function ToBase64(<MarshalAs(UnmanagedType.SafeArray)> data As Byte()) As String
             Return Convert.ToBase64String(data)
         End Function
         Public Function ToRaw(data As String) As Byte()
@@ -1633,352 +1738,20 @@ Namespace NSTFormXml
     End Class
 
 End Namespace
-Namespace NScript.Gameing
-    <ComClass()> <ComVisible(True)> Public Class NScriptGame
-        Private Map As Char(,)
-        Private IsInit As Boolean = False
-        Public Sub New()
-
-        End Sub
-
-        Friend Property Map1 As Char(,)
-            Get
-                Return Map
-            End Get
-            Set(value As Char(,))
-                Map = value
-            End Set
-        End Property
-
-        Public Sub InitMap(x As Int32, y As Int32)
-            ReDim Map1(x, y)
-            IsInit = True
-        End Sub
-        Public Sub DrawPoint(x As Int32, y As Int32, cr As String)
-            If Not IsInit Then
-                Throw New NotInitedException()
-            End If
-            If cr Is Nothing Then
-                Throw New ArgumentNullException(NameOf(cr))
-            End If
-            If cr.Length = 0 Then
-                Throw New ArgumentOutOfRangeException(NameOf(cr))
-            ElseIf cr.Length >= 2 Then
-                Throw New ArgumentOutOfRangeException(NameOf(cr))
-            End If
-            If y >= Map1.GetLength(1) Then
-                Throw New ArgumentOutOfRangeException(NameOf(y))
-                If x >= Map1.GetLength(0) Then
-                    Throw New ArgumentOutOfRangeException(NameOf(x))
-                Else
-                    Map(x, y) = cr.Chars(0)
-                End If
-            End If
-        End Sub
-        Public Property TMap As <MarshalAs(UnmanagedType.SafeArray)> Array
-            Get
-                Return Map1
-            End Get
-            Set(<MarshalAs(UnmanagedType.SafeArray)> value As Array)
-                If value Is Nothing Then
-                    Throw New ArgumentNullException(NameOf(value))
-                    Return
-                End If
-                If value.Rank = 2 Then
-                    Dim ie As Char(,)
-                    ie = TryCast(value, Char(,))
-                    Map1 = ie
-                    If ie Is Nothing Then
-                        Throw New ArgumentException(GetLocalString("Error0x1"), NameOf(value))
-                    End If
-                Else
-                    Throw New RankException()
-                End If
-            End Set
-        End Property
-    End Class
-    <Serializable> Public Class NotInitedException
-        Inherits Exception
-        Implements ISerializable
-        Public Sub New()
-            MyBase.New(GetLocalString("Error0x7"))
-        End Sub
-        Public Sub New(message As String)
-            MyBase.New(message)
-        End Sub
-        Protected Sub New(sl As SerializationInfo, ct As StreamingContext)
-            MyBase.New(sl, ct)
-        End Sub
-        Public Sub New(message As String, iexp As Exception)
-            MyBase.New(message, iexp)
-        End Sub
-    End Class
-End Namespace
 Namespace NScript.Text
-
-End Namespace
-Namespace NScript.IO
-    <ComClass()> <ComVisible(True)> Public NotInheritable Class StreamReader
-        Implements IDisposable, IWshRuntimeLibrary.TextStream
-        Private _NSR As System.IO.StreamReader
-        Public Sub Init(stm As Stream)
-            If stm Is Nothing Then
-                Throw New ArgumentNullException()
+    <ComClass(), ComVisible(True)> Public Class Encoder
+        Friend _ending As Encoding = New ASCIIEncoding()
+        Public Function GetString(<MarshalAs(UnmanagedType.SafeArray)> bytes As Byte()) As String
+            Return _ending.GetString(bytes)
+        End Function
+        Public Function GetBytes(Str As String) As <MarshalAs(UnmanagedType.SafeArray)> Byte()
+            Return _ending.GetBytes(Str)
+        End Function
+        Public Function GetChars(Str As String) As String()
+            If Str Is Nothing Then
+                Return {}
             End If
-            _NSR = New System.IO.StreamReader(stm, True)
-        End Sub
-        Public Sub InitNStm(stm As NStream)
-            If stm Is Nothing Then
-                Throw New ArgumentNullException()
-            End If
-            _NSR = New System.IO.StreamReader(stm.fs, True)
-        End Sub
-        Public Sub Dispose() Implements IDisposable.Dispose
-            DirectCast(_NSR, IDisposable).Dispose()
-        End Sub
-
-        Public Function Read(Characters As Integer) As String Implements ITextStream.Read
-            Dim str(Characters) As Char
-            _NSR.ReadBlock(str, 0, Characters)
-            Return New String(str)
+            Return Str.Cast(Of String).ToArray()
         End Function
-
-        Public Function ReadLine() As String Implements ITextStream.ReadLine
-            Return _NSR.ReadLine()
-        End Function
-
-        Public Function ReadAll() As String Implements ITextStream.ReadAll
-            Return _NSR.ReadToEnd()
-        End Function
-
-        Public Sub Write(Text As String) Implements ITextStream.Write
-            Throw New NotImplementedException()
-        End Sub
-
-        Public Sub WriteLine(Optional Text As String = "") Implements ITextStream.WriteLine
-            Throw New NotImplementedException()
-        End Sub
-
-        Public Sub WriteBlankLines(Lines As Integer) Implements ITextStream.WriteBlankLines
-            Throw New NotImplementedException()
-        End Sub
-
-        Public Sub Skip(Characters As Integer) Implements ITextStream.Skip
-            Me.Read(Characters)
-        End Sub
-
-        Public Sub SkipLine() Implements ITextStream.SkipLine
-            Me.ReadLine()
-        End Sub
-
-        Public Sub Close() Implements ITextStream.Close
-            _NSR.Close()
-            _NSR.Dispose()
-            _NSR = Nothing
-            Me.Dispose()
-        End Sub
-
-        Public ReadOnly Property Line As Integer Implements ITextStream.Line
-            Get
-                Throw New NotSupportedException()
-            End Get
-        End Property
-
-        Public ReadOnly Property Column As Integer Implements ITextStream.Column
-            Get
-                Throw New NotSupportedException()
-            End Get
-        End Property
-
-        Public ReadOnly Property AtEndOfStream As Boolean Implements ITextStream.AtEndOfStream
-            Get
-                Return _NSR.EndOfStream
-            End Get
-        End Property
-
-        Public ReadOnly Property AtEndOfLine As Boolean Implements ITextStream.AtEndOfLine
-            Get
-                Throw New NotSupportedException()
-            End Get
-        End Property
     End Class
-    <ComVisible(True)> <ComClass()> Public NotInheritable Class NStream
-        Implements IDisposable
-        Friend fs As Stream
-        Public Sub New()
-
-        End Sub
-        Public Sub InitOnMen()
-            fs = New MemoryStream()
-        End Sub
-        Public Sub Init(filename As String)
-            fs = New FileStream(filename, FileMode.OpenOrCreate)
-        End Sub
-        Public Sub Read(ByRef buffer As Byte(), offset As Int32, lentch As Int32)
-            fs.Read(buffer, offset, lentch)
-        End Sub
-        Public Sub Write(ByRef buffer As Byte(), offset As Int32, lentch As Int32)
-            fs.Write(buffer, offset, lentch)
-        End Sub
-        Public Sub WriteByte(b As Byte)
-            fs.WriteByte(b)
-        End Sub
-
-        Public Sub Dispose() Implements IDisposable.Dispose
-            DirectCast(fs, IDisposable).Dispose()
-        End Sub
-
-        Public Function ReadByte() As Byte
-            Return fs.ReadByte()
-        End Function
-        Public Property Position As Int32
-            Get
-                Return fs.Position
-            End Get
-            Set(value As Int32)
-                fs.Position = value
-            End Set
-        End Property
-    End Class
-    <ComClass()> <ComVisible(True)> Public NotInheritable Class StreamWriter
-        Implements IDisposable, IWshRuntimeLibrary.TextStream
-        Private _NSW As System.IO.StreamWriter
-        Public Sub Init(stm As Stream)
-            If stm Is Nothing Then
-                Throw New ArgumentNullException()
-            End If
-            _NSW = New System.IO.StreamWriter(stm, Encoding.ASCII)
-        End Sub
-        Public Sub InitNStm(stm As NStream)
-            If stm Is Nothing Then
-                Throw New ArgumentNullException()
-            End If
-            _NSW = New System.IO.StreamWriter(stm.fs, Encoding.ASCII)
-        End Sub
-        Public Sub Dispose() Implements IDisposable.Dispose
-            DirectCast(_NSW, IDisposable).Dispose()
-        End Sub
-
-        Public Function Read(Characters As Integer) As String Implements ITextStream.Read
-            Throw New NotImplementedException()
-        End Function
-
-        Public Function ReadLine() As String Implements ITextStream.ReadLine
-            Throw New NotImplementedException()
-        End Function
-
-        Public Function ReadAll() As String Implements ITextStream.ReadAll
-            Throw New NotImplementedException()
-        End Function
-
-        Public Sub Write(Text As String) Implements ITextStream.Write
-            _NSW.Write(Text)
-        End Sub
-
-        Public Sub WriteLine(Optional Text As String = "") Implements ITextStream.WriteLine
-            _NSW.WriteLine(Text)
-        End Sub
-
-        Public Sub WriteBlankLines(Lines As Integer) Implements ITextStream.WriteBlankLines
-            For i = 0 To Lines
-                Me.WriteLine()
-            Next
-        End Sub
-
-        Public Sub Skip(Characters As Integer) Implements ITextStream.Skip
-            Throw New NotImplementedException()
-        End Sub
-
-        Public Sub SkipLine() Implements ITextStream.SkipLine
-            Throw New NotImplementedException()
-        End Sub
-
-        Public Sub Close() Implements ITextStream.Close
-            _NSW.Close()
-            _NSW.Dispose()
-            _NSW = Nothing
-            Me.Dispose()
-        End Sub
-
-        Public ReadOnly Property Line As Integer Implements ITextStream.Line
-            Get
-                Throw New NotSupportedException()
-            End Get
-        End Property
-
-        Public ReadOnly Property Column As Integer Implements ITextStream.Column
-            Get
-                Throw New NotSupportedException()
-            End Get
-        End Property
-
-        Public ReadOnly Property AtEndOfStream As Boolean Implements ITextStream.AtEndOfStream
-            Get
-                Throw New NotSupportedException()
-            End Get
-        End Property
-
-        Public ReadOnly Property AtEndOfLine As Boolean Implements ITextStream.AtEndOfLine
-            Get
-                Throw New NotSupportedException()
-            End Get
-        End Property
-    End Class
-    <ComClass()> <ComVisible(True)> Public NotInheritable Class BinReader
-        Implements IDisposable
-
-        Private _Reader As BinaryReader
-        Public Sub InitBR(rr As BinaryReader)
-            _Reader = rr
-        End Sub
-        Public Sub Initstm(stm As Stream)
-            If stm Is Nothing Then
-                Throw New ArgumentNullException()
-            End If
-            _Reader = New BinaryReader(stm)
-        End Sub
-        Public Sub InitNstm(stm As NStream)
-            If stm Is Nothing Then
-                Throw New ArgumentNullException()
-            End If
-            _Reader = New BinaryReader(stm.fs)
-        End Sub
-        Public Function ReadByte() As Byte
-            Return _Reader.ReadByte()
-        End Function
-        Public Function ReadLong() As Integer
-            Return _Reader.ReadInt32()
-        End Function
-        Public Function ReadChar() As String
-            Return _Reader.ReadChar().ToString(CType(Nothing, IFormatProvider))
-        End Function
-        Public Function ReadString(Count As Integer) As String
-            Return _Reader.ReadChars(Count)
-        End Function
-        Public Function ReadBool() As Boolean
-            Return _Reader.ReadBoolean()
-        End Function
-        Public Function ReadDec() As Decimal
-            Return _Reader.ReadDecimal()
-        End Function
-        Public Function ReadSingle() As Single
-            Return _Reader.ReadSingle()
-        End Function
-        Public Function ReadBytes(Count As Int32) As <MarshalAs(UnmanagedType.SafeArray)> Byte()
-            Return _Reader.ReadBytes(Count)
-        End Function
-        Public Sub SkipBytes(Count As Int32)
-            _Reader.ReadBytes(Count)
-        End Sub
-
-        Public Sub Dispose() Implements IDisposable.Dispose
-            _Reader.Dispose()
-            GC.SuppressFinalize(Me)
-        End Sub
-        Protected Overrides Sub Finalize()
-            MyBase.Finalize()
-            Me.Dispose()
-        End Sub
-    End Class
-
 End Namespace
