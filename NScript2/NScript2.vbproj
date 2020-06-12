@@ -103,6 +103,7 @@
     <Compile Include="Nscript\Formxml\FormDataControl.vb" />
     <Compile Include="Nscript\Formxml\FormDataLabel.vb" />
     <Compile Include="Nscript\Formxml\FormDataTextBox.vb" />
+    <Compile Include="Nscript\Text\UTFTextDeEncoding.vb" />
     <Compile Include="Nscript\Zip\GZip.vb" />
     <Compile Include="Nscript\NetScript.vb" />
     <Compile Include="Nscript\NSConsole.vb" />
