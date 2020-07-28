@@ -56,7 +56,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Gma.QrCodeNet.Encoding">
-      <HintPath>..\NScript\bin\Debug\NScript安装\Gma.QrCodeNet.Encoding.dll</HintPath>
+      <HintPath>..\packages\QrCode.Net.0.4.0.0\lib\net40\Gma.QrCodeNet.Encoding.dll</HintPath>
+    </Reference>
+    <Reference Include="NAudio, Version=1.10.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.1.10.0\lib\net35\NAudio.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -97,7 +100,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Nscript\Text\Base64.vb" />
-    <Compile Include="Nscript\Junk\ConsoleHooker.vb" />
     <Compile Include="Nscript\Formxml\FormData.vb" />
     <Compile Include="Nscript\Formxml\FormDataButton.vb" />
     <Compile Include="Nscript\Formxml\FormDataControl.vb" />
@@ -111,7 +113,6 @@
     <Compile Include="Nscript\Form\NstForm.vb" />
     <Compile Include="Nscript\Text\NTranslator.vb" />
     <Compile Include="Nscript\Form\Timer.vb" />
-    <Compile Include="Nscript\Junk\Socket.vb" />
     <Compile Include="Nscript\Winapi\NaiveWinApi32.vb" />
     <Compile Include="Nscript\Drawing\NGDI.vb" />
     <Compile Include="Nscript\Drawing\NPen.vb" />
@@ -161,6 +162,9 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Nscript\Junk\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>

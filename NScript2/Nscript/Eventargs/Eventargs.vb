@@ -89,11 +89,7 @@ Namespace NScript
             Get
                 Dim res As String
                 res = CStr(keyevent.KeyCode)
-                If res.Length > 1 Then
-                    Return "?"
-                Else
-                    Return res
-                End If
+                Return If(res.Length > 1, "?", res)
             End Get
         End Property
         Public ReadOnly Property SenderId As String

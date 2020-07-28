@@ -26,10 +26,7 @@ Namespace NScript.Drawing
             End Set
         End Property
         Public Shared Widening Operator CType(point As CPT) As Point
-            If point Is Nothing Then
-                Return New Point()
-            End If
-            Return point._Value
+            Return If(point Is Nothing, New Point(), point._Value)
         End Operator
         Public Shared Widening Operator CType(point As Point) As CPT
             Return New CPT() With {._Value = point}

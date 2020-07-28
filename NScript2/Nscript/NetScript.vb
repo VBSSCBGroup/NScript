@@ -102,8 +102,19 @@ Namespace NScript
                 Threading.Thread.Sleep(100)
             End If
         End Sub
-        Friend Shared Function OnError(ex As Exception) As Int32
-            Dim terr As New ThreadExceptionDialog(ex)
+        Public Function OnError(Ex) As Integer
+            If TypeOf Ex IsNot Exception Then
+                If TypeOf Ex Is IConvertible Then
+                    Try
+                        Ex = New Exception(DirectCast(Ex, IConvertible).ToString(Nothing))
+                    Catch ex2 As Exception
+                        Ex = ex2
+                    End Try
+                Else
+                    Ex = New ArgumentException("ex不可转换", NameOf(Ex))
+                End If
+            End If
+            Dim terr As New ThreadExceptionDialog(Ex)
             Dim ret = terr.ShowDialog()
             If ret = DialogResult.Abort Then
                 Application.Exit()
@@ -111,7 +122,7 @@ Namespace NScript
                 Application.Restart()
                 Application.Exit()
             ElseIf ret = DialogResult.Ignore Then
-                ex = Nothing
+                Ex = Nothing
                 terr.Dispose()
                 Return 1
             End If
