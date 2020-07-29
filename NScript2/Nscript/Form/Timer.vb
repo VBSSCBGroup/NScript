@@ -11,7 +11,12 @@ Namespace NScript
             AddHandler Tim.Tick, AddressOf Ticke
         End Sub
         Friend Sub Ticke(sender As Object, e As EventArgs)
-            RaiseEvent Tick()
+            Try
+                RaiseEvent Tick()
+            Catch ex As Exception
+                Tim.Enabled = False
+                Throw
+            End Try
         End Sub
         Public Sub Start(Optional Interval As Int32 = 100)
             Tim.Interval = Interval

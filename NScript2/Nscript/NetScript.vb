@@ -132,7 +132,13 @@ Namespace NScript
         Public Sub RunFormProgram()
             Application.EnableVisualStyles()
             Try
-                Application.Run()
+                Do
+                    Application.DoEvents()
+                    If Application.OpenForms.Count = 0 Then
+                        Exit Do
+                    End If
+                    Threading.Thread.Sleep(1)
+                Loop
             Catch ex As InvalidOperationException
                 Throw
             Catch ex As Exception
@@ -143,9 +149,6 @@ Namespace NScript
                     frm.Dispose()
                 Next
             End Try
-        End Sub
-        Public Sub TN()
-
         End Sub
         Friend Sub INew()
             Try

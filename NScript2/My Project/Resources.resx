@@ -163,10 +163,10 @@
     <value>2.0</value>
   </data>
   <data name="NiVerL" xml:space="preserve">
-    <value>12898</value>
+    <value>12994</value>
   </data>
   <data name="Ver" xml:space="preserve">
-    <value>2.4|控制台之way|2.0.2</value>
+    <value>2.5|控制台之way|2.0.3</value>
     <comment>格式：版本号|版本代号|版本字符串</comment>
   </data>
 </root>

@@ -16,6 +16,7 @@ Namespace NScript
                                         RaiseEvent FormPaint()
                                     End Sub
             AH(NForm)
+            AddHandler NForm.ResizeEnd, AddressOf ReInitGDI
         End Sub
         Private ReadOnly NForm As New Form()
         Public ReadOnly Property NaiveForm As Form
@@ -31,7 +32,7 @@ Namespace NScript
                 Return
             End If
 
-            Dim wa As New StringReader(code.Replace("#", Chr(34)))
+            Dim wa As New StringReader(code.Replace("/#", "!@#$@^&*@%^&%#@$%""").Replace("#", Chr(34)).Replace("!@#$@^&*@%^&%#@$%""", "#"))
             Dim xmlreader As Xml.XmlReader = Xml.XmlReader.Create(wa)
             Dim xmlserv As New Xml.Serialization.XmlSerializer(GetType(NSTFormXml.FormData))
             Dim formdata As NSTFormXml.FormData = xmlserv.Deserialize(xmlreader)
@@ -87,16 +88,28 @@ Namespace NScript
                 Return CType(NForm.Controls, IEnumerable)
             End Get
         End Property
+        Public Property Graphics As CGraphics
+            Get
+                Return Me.CreateGraphics()
+            End Get
+            Set(value As CGraphics)
+                InnNGDI = value
+            End Set
+        End Property
         Public Sub AddControl(obj0 As Control)
             NForm.Controls.Add(obj0)
         End Sub
-        Private InnNGDI As NGDI
-        Public Function CreateGraphics() As NGDI
+        Private InnNGDI As CGraphics
+        Public Function CreateGraphics() As CGraphics
             If InnNGDI Is Nothing Then
-                InnNGDI = New NGDI()
+                InnNGDI = New CGraphics()
+                InnNGDI.Init(Me.NForm.CreateGraphics())
             End If
             Return InnNGDI
         End Function
+        Friend Sub ReInitGDI(sender, e)
+            If InnNGDI IsNot Nothing Then InnNGDI.GDI = Me.NForm.CreateGraphics()
+        End Sub
         Public Event FormPaint()
         Public ReadOnly Property Control(name As String) As Control
             Get

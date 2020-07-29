@@ -14,7 +14,7 @@ Namespace NScript
                 Return Sender.Name
             End Get
         End Property
-        Public ReadOnly Property MousePoint As CPT
+        Public ReadOnly Property MousePoint As CPoint
             Get
                 Return Control.MousePosition
             End Get
@@ -117,9 +117,9 @@ Namespace NScript
                 Return Sender.Name
             End Get
         End Property
-        Public ReadOnly Property MousePoint As CPT
+        Public ReadOnly Property MousePoint As CPoint
             Get
-                Return New CPT(Control.MousePosition)
+                Return New CPoint(Control.MousePosition)
             End Get
         End Property
         Public ReadOnly Property MouseButton As MouseButtons

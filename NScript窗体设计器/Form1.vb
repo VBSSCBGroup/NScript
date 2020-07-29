@@ -17,6 +17,7 @@ Public Class Form1
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles Me.Load
         DataGridView1.Rows.Add("My App", "FormAutoGen" & Int(Rnd() * 1000000), 0, 0, 400, 400, "Form")
+        UpdataForm()
     End Sub
     Private Function GenXmlCode()
         Dim strbulid As New StringBuilder
@@ -30,9 +31,10 @@ Public Class Form1
             Return ""
         End If
         Dim rows = frm.Cells
-
+        Escape(rows)
         strbulid.AppendFormat("<FormData text=#{0}# x=#{1}# y=#{2}# id=#{3}# px=#{4}# py=#{5}#>", rows("_Text").Value, rows("X").Value, rows("Y").Value, rows("Id").Value, rows("SizeX").Value, rows("SizeY").Value)
         For Each wawa As DataGridViewRow In DataGridView1.Rows
+            Escape(rows)
             rows = wawa.Cells
             If rows("_Type").Value = "Form" Or wawa.IsNewRow Then
             Else
@@ -43,6 +45,11 @@ Public Class Form1
 
         Return strbulid.ToString()
     End Function
+    Sub Escape(rows As DataGridViewCellCollection)
+        For Each rw As DataGridViewCell In rows
+            rw.Value = rw.Value.ToString().Replace("#", "/#")
+        Next
+    End Sub
     Private Function GenVbsCode()
         Dim strbulid As New StringBuilder
         Dim frm As DataGridViewRow
@@ -159,9 +166,9 @@ End Sub")
                                                   sjbd.Show()
                                               End Sub
         Next
-        nform.NaiveForm.MdiParent = Me
+        nform.NaiveForm.Location = Me.Location
         nform.NaiveForm.StartPosition = FormStartPosition.Manual
-        nform.NaiveForm.Location = Panel1.Location
+        nform.NaiveForm.Text = "窗体预览"
         nform.NaiveForm.TopMost = True
         nform.NaiveForm.Show()
     End Sub
@@ -204,5 +211,9 @@ End Sub")
 
     Private Sub Form1_Click(sender As Object, e As EventArgs) Handles TextBox1.DoubleClick
         Id.HeaderText = "(你的)名字"
+    End Sub
+
+    Private Sub Form1_Move(sender As Object, e As EventArgs) Handles Me.Move
+        nform.NaiveForm.Location = Me.Location
     End Sub
 End Class

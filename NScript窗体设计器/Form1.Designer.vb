@@ -24,17 +24,7 @@ Partial Class Form1
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.Panel1 = New System.Windows.Forms.Panel()
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
-        Me.Button2 = New System.Windows.Forms.Button()
-        Me.Button3 = New System.Windows.Forms.Button()
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me._Text = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Id = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.X = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -42,6 +32,14 @@ Partial Class Form1
         Me.SizeX = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.SizeY = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me._Type = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
+        Me.Button2 = New System.Windows.Forms.Button()
+        Me.Button3 = New System.Windows.Forms.Button()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
@@ -53,28 +51,55 @@ Partial Class Form1
         Me.TextBox1.Multiline = True
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.ReadOnly = True
-        Me.TextBox1.Size = New System.Drawing.Size(266, 276)
+        Me.TextBox1.Size = New System.Drawing.Size(497, 276)
         Me.TextBox1.TabIndex = 0
-        '
-        'Panel1
-        '
-        Me.Panel1.BackColor = System.Drawing.Color.White
-        Me.Panel1.Location = New System.Drawing.Point(284, 30)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(355, 276)
-        Me.Panel1.TabIndex = 1
-        Me.Panel1.Visible = False
         '
         'DataGridView1
         '
+        Me.DataGridView1.AllowUserToAddRows = False
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me._Text, Me.Id, Me.X, Me.Y, Me.SizeX, Me.SizeY, Me._Type})
         Me.DataGridView1.Location = New System.Drawing.Point(12, 334)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.RowTemplate.Height = 23
-        Me.DataGridView1.Size = New System.Drawing.Size(878, 173)
+        Me.DataGridView1.Size = New System.Drawing.Size(748, 173)
         Me.DataGridView1.TabIndex = 0
-        Me.DataGridView1.AllowUserToAddRows = False
+        '
+        '_Text
+        '
+        Me._Text.HeaderText = "文本"
+        Me._Text.Name = "_Text"
+        '
+        'Id
+        '
+        Me.Id.HeaderText = "名字"
+        Me.Id.Name = "Id"
+        '
+        'X
+        '
+        Me.X.HeaderText = "X轴"
+        Me.X.Name = "X"
+        '
+        'Y
+        '
+        Me.Y.HeaderText = "Y轴"
+        Me.Y.Name = "Y"
+        '
+        'SizeX
+        '
+        Me.SizeX.HeaderText = "X轴大小"
+        Me.SizeX.Name = "SizeX"
+        '
+        'SizeY
+        '
+        Me.SizeY.HeaderText = "Y轴大小"
+        Me.SizeY.Name = "SizeY"
+        '
+        '_Type
+        '
+        Me._Type.HeaderText = "类型"
+        Me._Type.Name = "_Type"
+        Me._Type.ReadOnly = True
         '
         'Button1
         '
@@ -129,21 +154,12 @@ Partial Class Form1
         Me.GroupBox1.Controls.Add(Me.Button1)
         Me.GroupBox1.Controls.Add(Me.Button2)
         Me.GroupBox1.Controls.Add(Me.ComboBox1)
-        Me.GroupBox1.Location = New System.Drawing.Point(645, 15)
+        Me.GroupBox1.Location = New System.Drawing.Point(515, 15)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(245, 291)
         Me.GroupBox1.TabIndex = 7
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "控制"
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(287, 15)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(41, 12)
-        Me.Label2.TabIndex = 0
-        Me.Label2.Text = "预览图"
         '
         'Label3
         '
@@ -159,54 +175,16 @@ Partial Class Form1
         Me.Timer1.Enabled = True
         Me.Timer1.Interval = 40
         '
-        '_Text
-        '
-        Me._Text.HeaderText = "文本"
-        Me._Text.Name = "_Text"
-        '
-        'Id
-        '
-        Me.Id.HeaderText = "名字"
-        Me.Id.Name = "Id"
-        '
-        'X
-        '
-        Me.X.HeaderText = "X轴"
-        Me.X.Name = "X"
-        '
-        'Y
-        '
-        Me.Y.HeaderText = "Y轴"
-        Me.Y.Name = "Y"
-        '
-        'SizeX
-        '
-        Me.SizeX.HeaderText = "X轴大小"
-        Me.SizeX.Name = "SizeX"
-        '
-        'SizeY
-        '
-        Me.SizeY.HeaderText = "Y轴大小"
-        Me.SizeY.Name = "SizeY"
-        '
-        '_Type
-        '
-        Me._Type.HeaderText = "类型"
-        Me._Type.Name = "_Type"
-        Me._Type.ReadOnly = True
-        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.AppWorkspace
-        Me.ClientSize = New System.Drawing.Size(902, 519)
-        Me.Controls.Add(Me.Label2)
+        Me.ClientSize = New System.Drawing.Size(776, 519)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.DataGridView1)
         Me.Controls.Add(Me.TextBox1)
-        Me.Controls.Add(Me.Panel1)
         Me.IsMdiContainer = True
         Me.Name = "Form1"
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
@@ -218,7 +196,6 @@ Partial Class Form1
     End Sub
 
     Friend WithEvents TextBox1 As TextBox
-    Friend WithEvents Panel1 As Panel
     Friend WithEvents DataGridView1 As DataGridView
     Friend WithEvents Button1 As Button
     Friend WithEvents Label1 As Label
@@ -226,7 +203,6 @@ Partial Class Form1
     Friend WithEvents Button2 As Button
     Friend WithEvents Button3 As Button
     Friend WithEvents GroupBox1 As GroupBox
-    Friend WithEvents Label2 As Label
     Friend WithEvents Label3 As Label
     Friend WithEvents Timer1 As Timer
     Friend WithEvents _Text As DataGridViewTextBoxColumn

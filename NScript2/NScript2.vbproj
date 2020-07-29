@@ -81,7 +81,8 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Nscript\Drawing\CPT.vb" />
+    <Compile Include="Nscript\Drawing\Rect.vb" />
+    <Compile Include="Nscript\Drawing\CPoint.vb" />
     <Compile Include="Nscript\Eventargs\Eventargs.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -114,8 +115,8 @@
     <Compile Include="Nscript\Text\NTranslator.vb" />
     <Compile Include="Nscript\Form\Timer.vb" />
     <Compile Include="Nscript\Winapi\NaiveWinApi32.vb" />
-    <Compile Include="Nscript\Drawing\NGDI.vb" />
-    <Compile Include="Nscript\Drawing\NPen.vb" />
+    <Compile Include="Nscript\Drawing\CGraphics.vb" />
+    <Compile Include="Nscript\Drawing\CPen.vb" />
     <Compile Include="Nscript\Text\ASCEncoding.vb" />
     <Compile Include="QrCodeEncoding.vb" />
     <Compile Include="VerUpdate.vb" />
