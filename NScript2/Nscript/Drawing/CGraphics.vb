@@ -46,6 +46,21 @@ Namespace NScript.Drawing
             gdip.DrawImage(bitmap, rct.Value)
             bitmap.Dispose()
         End Sub
+        Public Sub DrawImageLU(Img As CBitmap, rct As Rect)
+            Dim bitmap As Bitmap = Img.Bitmap
+            If bitmap Is Nothing Then Throw New ArgumentNullException(NameOf(Img))
+            Dim gdip As Graphics = BaseGraphics
+            gdip.DrawIconUnstretched(Icon.FromHandle(bitmap.GetHicon()), rct.Value)
+            bitmap.Dispose()
+        End Sub
+        Public Sub DrawImageLPU(Path As String, rct As Rect)
+            If File.Exists(Path) Then
+                Dim bitmap As New Bitmap(Path)
+                Dim gdip As Graphics = BaseGraphics
+                gdip.DrawIconUnstretched(Icon.FromHandle(bitmap.GetHicon()), rct.Value)
+                bitmap.Dispose()
+            End If
+        End Sub
         Public Sub DrawImageP(Path As String, rct As Rect)
             If File.Exists(Path) Then
                 Dim bitmap As New Bitmap(Path)
