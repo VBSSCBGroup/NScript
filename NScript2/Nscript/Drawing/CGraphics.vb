@@ -61,6 +61,10 @@ Namespace NScript.Drawing
                 bitmap.Dispose()
             End If
         End Sub
+        Public Sub SetGraphicsQuality(Smoothing As Drawing2D.SmoothingMode, Compositing As Drawing2D.CompositingQuality)
+            GDI.SmoothingMode = Smoothing
+            GDI.CompositingQuality = Compositing
+        End Sub
         Public Sub DrawImageP(Path As String, rct As Rect)
             If File.Exists(Path) Then
                 Dim bitmap As New Bitmap(Path)
