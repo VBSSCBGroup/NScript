@@ -81,6 +81,7 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Nscript\Drawing\CBitmap.vb" />
     <Compile Include="Nscript\Drawing\Rect.vb" />
     <Compile Include="Nscript\Drawing\CPoint.vb" />
     <Compile Include="Nscript\Eventargs\Eventargs.vb" />

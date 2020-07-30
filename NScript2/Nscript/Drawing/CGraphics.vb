@@ -39,7 +39,14 @@ Namespace NScript.Drawing
                 pen.Dispose()
             End SyncLock
         End Sub
-        Public Sub DrawImage(Path As String, rct As Rect)
+        Public Sub DrawImage(Img As CBitmap, rct As Rect)
+            Dim bitmap As Bitmap = Img.Bitmap
+            If bitmap Is Nothing Then Throw New ArgumentNullException(NameOf(Img))
+            Dim gdip As Graphics = BaseGraphics
+            gdip.DrawImage(bitmap, rct.Value)
+            bitmap.Dispose()
+        End Sub
+        Public Sub DrawImageP(Path As String, rct As Rect)
             If File.Exists(Path) Then
                 Dim bitmap As New Bitmap(Path)
                 Dim gdip As Graphics = BaseGraphics
