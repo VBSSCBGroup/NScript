@@ -53,15 +53,7 @@ Namespace NScript
             Return gu1 & gu2
         End Function
         Public Function ChineseToSPC(str0 As String, Optional Pwd As String = "") As String
-            If str0 Is Nothing Then
-                Return ""
-            Else
-                If Pwd Is Nothing Then
-                    Return CTS(str0)
-                Else
-                    Return CTS(str0, Pwd)
-                End If
-            End If
+            Return If(str0 Is Nothing, "", If(Pwd Is Nothing, CTS(str0), CTS(str0, Pwd)))
         End Function
         Friend Function CTS(Str0 As String, Optional Pwd As String = "") As String
             Dim strbulid As New StringBuilder
@@ -101,15 +93,7 @@ Namespace NScript
             Return strbulid.ToString()
         End Function
         Public Function SPCToChinese(str0 As String, Optional Pwd As String = "") As String
-            If str0 Is Nothing Then
-                Return ""
-            Else
-                If Pwd Is Nothing Then
-                    Return STCFriend(str0)
-                Else
-                    Return STCFriend(str0, Pwd)
-                End If
-            End If
+            Return If(str0 Is Nothing, "", If(Pwd Is Nothing, STCFriend(str0), STCFriend(str0, Pwd)))
         End Function
         Friend Function STCFriend(str0 As String, Optional Pwd As String = "") As String
             If str0.StartsWith(G1 & "~", StringComparison.CurrentCulture) Then

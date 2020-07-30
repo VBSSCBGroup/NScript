@@ -295,10 +295,7 @@ Namespace NScript
         ''' <param name="Obj0">你不可能有的对象</param>
         ''' <returns></returns>
         Public Function ToString(Obj0 As Object) As String
-            If Obj0 Is Nothing Then
-                Return ""
-            End If
-            Return Obj0.ToString()
+            Return If(Obj0 Is Nothing, "", Obj0.ToString())
         End Function
         ''' <summary>
         ''' 判断调试器是否附加，可用作防御调试器
@@ -423,17 +420,12 @@ End Namespace", IIf(HasReturn, "Function", "Sub"), DllMethodName, nstr, DllName)
                     Exit For
                 End If
             Next
-            If type Is Nothing Or aby2 Is Nothing Then
-                Return Nothing
-            Else
-                Return aby2.CreateInstance(type.FullName, False, BindingFlags.Instance Or BindingFlags.[Public], Nothing, CreateArgs, Globalization.CultureInfo.CurrentCulture, Nothing)
-            End If
+            Return If(type Is Nothing Or aby2 Is Nothing,
+                Nothing,
+                aby2.CreateInstance(type.FullName, False, BindingFlags.Instance Or BindingFlags.[Public], Nothing, CreateArgs, Globalization.CultureInfo.CurrentCulture, Nothing))
         End Function
         Public Function GetHashCode(Obj0 As Object) As Int32
-            If Obj0 Is Nothing Then
-                Return 0
-            End If
-            Return Obj0.GetHashCode()
+            Return If(Obj0 Is Nothing, 0, Obj0.GetHashCode())
         End Function
         Public Sub SOV(Obj0 As Object, name As String, value As Object)
             If Obj0 IsNot Nothing Then

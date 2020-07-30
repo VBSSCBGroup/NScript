@@ -111,6 +111,9 @@ Namespace NScript
             If InnNGDI IsNot Nothing Then InnNGDI.GDI = Me.NForm.CreateGraphics()
         End Sub
         Public Event FormPaint()
+        Public Sub Refresh()
+            NForm.Refresh()
+        End Sub
         Public ReadOnly Property Control(name As String) As Control
             Get
                 For Each wa As Control In NForm.Controls
@@ -157,6 +160,15 @@ Namespace NScript
         Public Sub Dispose()
             NForm.Dispose()
         End Sub
+        Public Property WindowRect As Rect
+            Get
+                Return New Rect() With {.Value = New Rectangle(NForm.Location, NForm.Size)}
+            End Get
+            Set(value As Rect)
+                NForm.Location = value.Value.Location
+                NForm.Size = value.Value.Size
+            End Set
+        End Property
 #Enable Warning
     End Class
 End Namespace

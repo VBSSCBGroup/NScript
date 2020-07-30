@@ -8,7 +8,7 @@
         ' 在 InitializeComponent() 调用之后添加任何初始化。
         Label1.Text = String.Format(Label1.Text, ctlid)
     End Sub
-    Private ControlId As String, Frm1 As Form1
+    Private ReadOnly ControlId As String, Frm1 As Form1
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         If ComboBox1.Items.Contains(ComboBox1.Text) Then
             If Frm1 IsNot Nothing Then

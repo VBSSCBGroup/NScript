@@ -13,10 +13,7 @@ Namespace NScript.Text
             Return _ending.GetBytes(Str)
         End Function
         Public Function GetChars(Str As String) As String()
-            If Str Is Nothing Then
-                Return {}
-            End If
-            Return Str.Cast(Of String).ToArray()
+            Return If(Str Is Nothing, {}, Str.Cast(Of String).ToArray())
         End Function
     End Class
 End Namespace
