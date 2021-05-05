@@ -1,4 +1,4 @@
- NScript 一款真正人性化的vbs库（串味了
+[![State-of-the-art Shitcode](https://img.shields.io/static/v1?label=State-of-the-art&message=Shitcode&color=7B5804)](https://github.com/trekhleb/state-of-the-art-shitcode)
  <br/>
  # NScript 窗体
  少说b话，直接上代码
